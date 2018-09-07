@@ -396,9 +396,9 @@ for(var e in n)t.push({key:e,value:n[e]});return t},mo.merge=function(n){return 
    globe={
     type:"sphere"
    };
-   return Concurrency.Bind(D3.Json("/world-110m.json"),function(a)
+   return Concurrency.Bind(D3.Json("world-110m.json"),function(a)
    {
-    return Concurrency.Bind(D3.Tsv("/world-country-names.tsv"),function(a$1)
+    return Concurrency.Bind(D3.Tsv("world-country-names.tsv"),function(a$1)
     {
      var landFeature,countries,borders,countries$1;
      function transition(i)
