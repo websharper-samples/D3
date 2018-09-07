@@ -58,8 +58,8 @@ module WorldTour =
         let path = D3.Geo.Path().Projection(projection).Context(c)
         async {
             let globe = New ["type" => "sphere"]
-            let! world = D3.Json("/world-110m.json")
-            let! names = D3.Tsv("/world-country-names.tsv")
+            let! world = D3.Json("world-110m.json")
+            let! names = D3.Tsv("world-country-names.tsv")
             let landFeature = topojson.feature(world, world?objects?``land``)
             let countries : obj [] = topojson.feature(world, world?objects?countries)?features
             let borders = topojson.mesh(world, world?objects?countries, fun (a, b) -> a !==. b)
