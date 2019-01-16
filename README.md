@@ -1,4 +1,4 @@
-# WebSharper D3
+# WebSharper D3 [![Build status](https://ci.appveyor.com/api/projects/status/m9ajmv49mkco0p89?svg=true)](https://ci.appveyor.com/project/IntelliFactory/d3)
 
 Sample for [WebSharper](https://websharper.com) bindings for [D3](https://d3js.org/).
 
