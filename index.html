@@ -1,14 +1,131 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <title>D3</title>
-        <link rel="stylesheet" href="Content/D3.css" />
-        <script type="text/javascript" src="https://dotnet-websharper.github.io/d3/topojson.v1.min.js"></script>
-        <script src="Content/D3.head.js"></script>
-    </head>
-    <body>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D3 World Tour</title>
+    <script type="text/javascript" src="Scripts/D3.head.js"></script>
+    <script>
+        // The WebSharper.D3 binding calls d3.json/d3.tsv with an (error, data)
+        // callback; D3 v7 returns a Promise, so adapt it here.
+        (function () {
+            var d3 = window.d3;
+            if (!d3) return;
+            ['json', 'tsv', 'csv', 'text', 'xml', 'html'].forEach(function (name) {
+                var original = d3[name];
+                if (typeof original !== 'function') return;
+                d3[name] = function (url, arg, cb) {
+                    var callback = typeof arg === 'function' ? arg : (typeof cb === 'function' ? cb : null);
+                    var init = typeof arg === 'function' ? undefined : arg;
+                    var promise = original.call(d3, url, init);
+                    if (callback) {
+                        promise.then(function (data) { callback(null, data); },
+                                     function (err) { callback(err); });
+                        return;
+                    }
+                    return promise;
+                };
+            });
+        })();
+    </script>
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            padding: 48px 24px 64px;
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, sans-serif;
+            color: #0f172a;
+            background:
+                radial-gradient(900px 500px at 15% -10%, rgba(99, 102, 241, 0.14), transparent 60%),
+                radial-gradient(800px 460px at 90% 0%, rgba(14, 165, 233, 0.12), transparent 60%),
+                linear-gradient(160deg, #f8fafc 0%, #eef2ff 100%);
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page > header h1 {
+            margin: 0;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .page > header p {
+            margin: 10px 0 0;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        #main {
+            margin-top: 8px;
+        }
+
+        /* The country name, updated by the client during each transition. */
+        #main h1 {
+            min-height: 1.2em;
+            margin: 28px 0 12px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #1e293b;
+        }
+
+        #main canvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 24px 50px rgba(15, 23, 42, 0.16);
+        }
+
+        .credits {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .credits a {
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .credits a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <header>
+            <h1>D3 World Tour</h1>
+            <p>A rotating globe that visits every country, drawn with D3 and WebSharper</p>
+        </header>
         <div id="main"></div>
-        <script src="Content/D3.js"></script>
-    </body>
+        <p class="credits">
+            Based on <a href="http://bl.ocks.org/mbostock/4183330" target="_blank" rel="noreferrer">mbostock's example</a>,
+            written with <a href="https://websharper.com" target="_blank" rel="noreferrer">WebSharper</a>.
+        </p>
+    </div>
+    <script type="text/javascript" src="topojson.v1.min.js"></script>
+    <script type="module" src="Scripts/D3.min.js"></script>
+</body>
+
 </html>
